@@ -7,6 +7,7 @@ runpod_api_key=$(<runpod_api_key)
 runpodctl config --apiKey $runpod_api_key
 
 sudo dnf install cronie
+sudo service crond restart
 
 python3 -m venv .venv
 source .venv/bin/activate

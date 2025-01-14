@@ -1,5 +1,6 @@
 # Other git repos
 secret_token
+runpod_api_key
 
 # custom
 tokens.json
