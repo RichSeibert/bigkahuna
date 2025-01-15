@@ -10,7 +10,7 @@ app = Flask(__name__)
 limiter = Limiter(get_remote_address, app=app, default_limits=["100 per hour"])
 workers = {}
 with open("token.txt") as file:
-    token = file.read() # Replace with your actual secret token
+    token = file.read().split("\n")[0] # Replace with your actual secret token
 
 # Set up logging
 year_month_date = datetime.now().strftime("%Y_%m_%d")
