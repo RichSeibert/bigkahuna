@@ -3,6 +3,7 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
 import logging
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -12,10 +13,9 @@ with open("token.txt") as file:
     token = file.read() # Replace with your actual secret token
 
 # Set up logging
-log_level = getattr(logging, args.log.upper(), logging.INFO)
 year_month_date = datetime.now().strftime("%Y_%m_%d")
 logging.basicConfig(
-    level=log_level,
+    level=logging.INFO,
     filename = 'logs/bigkahuna' + year_month_date + '.log',
     format='%(asctime)s - %(levelname)s - %(message)s',
     datefmt='%H:%M:%S'
