@@ -25,8 +25,8 @@ logging.info("\n-------------------------------------------------\n")
 # Middleware to check token
 @app.before_request
 def verify_token():
-    token = request.headers.get("Authorization")
-    if not token or token != token:
+    request_token = request.headers.get("Authorization")
+    if not request_token or request_token != token:
         return jsonify({"status": "Unauthorized"}), 401
 
 @app.route('/register-worker', methods=['POST'])
