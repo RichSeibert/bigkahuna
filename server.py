@@ -4,6 +4,7 @@ from flask_limiter.util import get_remote_address
 
 import logging
 from datetime import datetime
+import subprocess
 
 app = Flask(__name__)
 
@@ -48,6 +49,7 @@ def task_completed():
     if worker_id in workers:
         workers.pop(worker_id)
         logging.info(f"Worker {worker_id} completed task, terminating instance")
+        subprocess.call("./terminate_runpod_instance.sh")
         return jsonify({"status": "Task completed"}), 200
     return jsonify({"status": "Unknown worker"}), 400
 
