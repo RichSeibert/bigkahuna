@@ -2,6 +2,8 @@ from flask import Flask, request, jsonify
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
+import logging
+
 app = Flask(__name__)
 
 limiter = Limiter(get_remote_address, app=app, default_limits=["100 per hour"])
