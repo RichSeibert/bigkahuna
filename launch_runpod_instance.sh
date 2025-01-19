@@ -3,7 +3,7 @@
 # TODO figure out how to make `bash run.sh ...` command non continue in the background so start.sh doesn't get blocked
 runpodctl create pod --args "bash -c 'cd /workspace/roobot; python bot.py; cd /workspace/rooporter; bash run.sh &> last_run_output.txt ; /start.sh'" \
                      --secureCloud \
-                     --containerDiskSize 10 \
+                     --containerDiskSize 20 \
                      --gpuCount 1 \
                      --gpuType "NVIDIA A40" \
                      --templateId "runpod-torch-v240" \
