@@ -36,7 +36,7 @@ def register_worker():
     data = request.json
     worker_id = data.get("worker_id")
     if worker_id:
-        workers[worker_id] = {"start_time": ""}
+        workers[worker_id] = {"start_time": datetime.now().strftime("%Y_%m_%d_%H_%M_%S")}
         logging.info(f"Worker {worker_id} registered")
         return jsonify({"status": "Worker registered"}), 200
     return jsonify({"status": "Worker ID required"}), 400
@@ -60,6 +60,13 @@ def task_completed():
 @limiter.limit("5 per minute")
 def get_status():
     return jsonify(workers)
+
+@app.route('/clear-workers', methods=['POST'])
+@limiter.limit("5 per minute")
+def clear_workers():
+    logging.info(f"Clearing workers - {workers}")
+    workers.clear()
+    return jsonify({"status": "Cleared workers"}), 200
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
