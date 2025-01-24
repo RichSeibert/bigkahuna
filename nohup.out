@@ -1,0 +1,29 @@
+[2025-01-24 02:34:23 +0000] [548129] [INFO] Starting gunicorn 23.0.0
+[2025-01-24 02:34:23 +0000] [548129] [INFO] Listening at: http://0.0.0.0:8080 (548129)
+[2025-01-24 02:34:23 +0000] [548129] [INFO] Using worker: sync
+[2025-01-24 02:34:23 +0000] [548130] [INFO] Booting worker with pid: 548130
+/home/ec2-user/bigkahuna/.venv/lib64/python3.9/site-packages/flask_limiter/extension.py:333: UserWarning: Using the in-memory storage for tracking rate limits as no storage was explicitly specified. This is not recommended for production use. See: https://flask-limiter.readthedocs.io#configuring-a-storage-backend for documentation about configuring the storage backend.
+  warnings.warn(
+[2025-01-24 02:34:56 +0000] [548129] [INFO] Handling signal: int
+[2025-01-24 02:34:56 +0000] [548130] [INFO] Worker exiting (pid: 548130)
+[2025-01-24 02:34:57 +0000] [548129] [INFO] Shutting down: Master
+[2025-01-24 02:35:14 +0000] [548196] [INFO] Starting gunicorn 23.0.0
+[2025-01-24 02:35:14 +0000] [548196] [INFO] Listening at: http://0.0.0.0:8080 (548196)
+[2025-01-24 02:35:14 +0000] [548196] [INFO] Using worker: sync
+[2025-01-24 02:35:14 +0000] [548197] [INFO] Booting worker with pid: 548197
+/home/ec2-user/bigkahuna/.venv/lib64/python3.9/site-packages/flask_limiter/extension.py:333: UserWarning: Using the in-memory storage for tracking rate limits as no storage was explicitly specified. This is not recommended for production use. See: https://flask-limiter.readthedocs.io#configuring-a-storage-backend for documentation about configuring the storage backend.
+  warnings.warn(
+Configuration saved to file: /home/ec2-user/.runpod/config.toml
+Existing local SSH key found.
+SSH key already exists in the cloud. No action needed.
+Error: accepts 1 arg(s), received 0
+Usage:
+  runpodctl remove pod [podId] [flags]
+
+Flags:
+  -h, --help   help for pod
+
+Error: accepts 1 arg(s), received 0
+[2025-01-24 02:37:29 +0000] [548196] [INFO] Handling signal: term
+[2025-01-24 02:37:29 +0000] [548197] [INFO] Worker exiting (pid: 548197)
+[2025-01-24 02:37:30 +0000] [548196] [INFO] Shutting down: Master

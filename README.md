@@ -1,7 +1,7 @@
 # bigkahuna
 Host to control workers.
 
-- Run with `bash run_server.sh &` to run in the background.
+- Run with `nohup bash run_server.sh &` to run in the background.
 - `ps aux | grep python`
 
 

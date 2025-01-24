@@ -38,8 +38,8 @@ def register_worker():
     data = request.json
     worker_id = data.get("worker_id")
     if worker_id:
-        start_time = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-        workers[worker_id] = {"start_time": start_time}
+        current_time = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+        workers[worker_id] = {"start_time": current_time}
         logging.info(f"Registered worker {worker_id} at {start_time}")
         return jsonify({"status": "Worker registered"}), 200
     return jsonify({"status": "Worker ID required"}), 400
@@ -57,7 +57,8 @@ def task_completed():
         # terminate the least recently started pod (I'm assuming).
         # The worker id I use should be the runpod id instead of a UUID
         subprocess.call("./terminate_runpod_instance.sh")
-        logging.info(f"Terminated worker {worker_id} at {worker_info['start_time']}")
+        current_time = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+        logging.info(f"Terminated worker {worker_id} at {current_time}")
     except Exception as e:
         logging.info(f"Subprocess failed for terminating instance: {e}")
     return jsonify({"status": "Task completed"}), 200
