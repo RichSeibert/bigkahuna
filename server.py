@@ -11,7 +11,7 @@ app = Flask(__name__)
 limiter = Limiter(get_remote_address, app=app, default_limits=["100 per hour"])
 workers = {}
 with open("token.txt") as file:
-    token = file.read().split("\n")[0] # Replace with your actual secret token
+    token = file.read().split("\n")[0]
 
 # Set up logging
 year_month_date = datetime.now().strftime("%Y_%m_%d")
@@ -37,7 +37,7 @@ def register_worker():
     worker_id = data.get("worker_id")
     if worker_id:
         workers[worker_id] = {"start_time": datetime.now().strftime("%Y_%m_%d_%H_%M_%S")}
-        logging.info(f"Worker {worker_id} registered")
+        logging.info(f"Registered worker {worker_id} at {workers[worker_id]}")
         return jsonify({"status": "Worker registered"}), 200
     return jsonify({"status": "Worker ID required"}), 400
 
@@ -48,9 +48,12 @@ def task_completed():
     worker_id = data.get("worker_id")
     if worker_id in workers:
         workers.pop(worker_id)
-        logging.info(f"Worker {worker_id} completed task, terminating instance")
         try:
+            # TODO this only works with one pod max. The script will just
+            # terminate the least recently started pod (I'm assuming).
+            # The worker id I use should be the runpod id instead of a UUID
             subprocess.call("./terminate_runpod_instance.sh")
+            logging.info(f"Terminated worker {worker_id} at {workers[worker_id]}")
         except Exception as e:
             logging.info(f"Subprocess failed for terminating instance: {e}")
         return jsonify({"status": "Task completed"}), 200
