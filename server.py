@@ -40,7 +40,7 @@ def register_worker():
     if worker_id:
         current_time = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
         workers[worker_id] = {"start_time": current_time}
-        logging.info(f"Registered worker {worker_id} at {start_time}")
+        logging.info(f"Registered worker {worker_id} at {current_time}")
         return jsonify({"status": "Worker registered"}), 200
     return jsonify({"status": "Worker ID required"}), 400
 
