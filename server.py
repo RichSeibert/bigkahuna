@@ -23,6 +23,8 @@ logging.basicConfig(
 )
 logging.info("\n-------------------------------------------------\n")
 
+# TODO add scheduling here to do the same thing the cron jobs are doing
+
 # Middleware to check token
 @app.before_request
 def verify_token():
