@@ -57,6 +57,23 @@ def run_runpod_command(command, run_attempt=1):
         logging.error(f"Failed to run command '{command}': {e}")
         return 1
 
+scheduler.add_job(
+    id="launch_runpod_instance_job",
+    func=run_runpod_command,
+    args=["./launch_runpod_instance.sh"],
+    trigger='cron',
+    hour=3,
+    minute=10
+)
+scheduler.add_job(
+    id="terminate_runpod_instance_job",
+    func=run_runpod_command,
+    args=["./terminate_runpod_instance.sh"],
+    trigger='cron',
+    hour=18,
+    minute=0
+)
+
 # Middleware to check token
 @app.before_request
 def verify_token():
@@ -102,9 +119,19 @@ def get_status():
     return jsonify(workers)
 
 @app.route('/get-jobs', methods=['GET'])
-@limiter.limit("1 per minute")
+@limiter.limit("5 per minute")
 def get_jobs():
-    return jsonify(scheduler.get_jobs())
+    jobs = scheduler.get_jobs()
+    job_details = [
+        {
+            "id": job.id,
+            "func": job.func_ref,
+            "args": job.args,
+            "trigger": str(job.trigger)
+        }
+        for job in jobs
+    ]
+    return jsonify(job_details)
 
 @app.route('/clear-workers', methods=['POST'])
 @limiter.limit("5 per minute")
@@ -113,26 +140,8 @@ def clear_workers():
     workers.clear()
     return jsonify({"status": "Cleared workers"}), 200
 
-def schedule_cron_jobs():
-    scheduler.add_job(
-        id="launch_runpod_instance_job",
-        func=run_runpod_command,
-        args=["./launch_runpod_instance.sh"],
-        trigger='cron',
-        hour=3,
-        minute=0
-    )
-    scheduler.add_job(
-        id="terminate_runpod_instance_job",
-        func=run_runpod_command,
-        args=["./terminate_runpod_instance.sh"],
-        trigger='cron',
-        hour=18,
-        minute=0
-    )
 
 if __name__ == '__main__':
     scheduler.init_app(app)
-    schedule_cron_jobs()
     scheduler.start()
     app.run(host='0.0.0.0', port=8080)
