@@ -8,11 +8,6 @@ from datetime import datetime
 import subprocess
 
 
-limiter = Limiter(get_remote_address, app=app, default_limits=["100 per hour"])
-workers = {}
-with open("token.txt") as file:
-    token = file.read().split("\n")[0]
-
 # Set up logging
 year_month_date = datetime.now().strftime("%Y_%m_%d")
 logging.basicConfig(
@@ -23,7 +18,12 @@ logging.basicConfig(
 )
 logging.info("\n-------------------------------------------------\n")
 
+workers = {}
+with open("token.txt") as file:
+    token = file.read().split("\n")[0]
+
 app = Flask(__name__)
+limiter = Limiter(get_remote_address, app=app, default_limits=["100 per hour"])
 scheduler = APScheduler()
 
 # TODO each job/process that runs on runpod should use a client lib to send a

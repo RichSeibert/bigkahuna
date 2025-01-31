@@ -1,4 +1,5 @@
 flask
 flask_limiter
 apscheduler
+Flask-APScheduler
 gunicorn
