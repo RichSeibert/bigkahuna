@@ -52,10 +52,10 @@ def run_runpod_command(command, run_attempt=1):
                 )
             else:
                 logging.error(f"Failed to run '{command}' 2nd time, will not attempt to run again")
-                return
+                return 1
     except Exception as e:
         logging.error(f"Failed to run command '{command}': {e}")
-        return
+        return 1
 
 # Middleware to check token
 @app.before_request
@@ -83,12 +83,15 @@ def task_completed():
     worker_id = data.get("worker_id")
     if worker_id not in workers:
         return jsonify({"status": "Unknown worker"}), 400
-    worker_info = workers.pop(worker_id)
     try:
         # TODO this only works with one pod max. The script will just
         # terminate the least recently started pod (I'm assuming).
         # The worker id I use should be the runpod id instead of a UUID
-        run_runpod_command("./terminate_runpod_instance.sh")
+        result = run_runpod_command("./terminate_runpod_instance.sh")
+        if not result:
+            worker_info = workers.pop(worker_id)
+            current_time = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+            logging.info(f"Terminated worker {worker_id} at {current_time}")
     except Exception as e:
         logging.info(f"Subprocess failed for terminating instance: {e}")
     return jsonify({"status": "Task completed"}), 200
@@ -129,7 +132,7 @@ def schedule_cron_jobs():
     )
 
 if __name__ == '__main__':
-    schedule_cron_jobs()
     scheduler.init_app(app)
+    schedule_cron_jobs()
     scheduler.start()
     app.run(host='0.0.0.0', port=8080)
