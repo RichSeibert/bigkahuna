@@ -98,6 +98,11 @@ def task_completed():
 def get_status():
     return jsonify(workers)
 
+@app.route('/get-jobs', methods=['GET'])
+@limiter.limit("1 per minute")
+def get_status():
+    return jsonify(scheduler.get_jobs())
+
 @app.route('/clear-workers', methods=['POST'])
 @limiter.limit("5 per minute")
 def clear_workers():
