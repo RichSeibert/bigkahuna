@@ -100,7 +100,7 @@ def get_status():
 
 @app.route('/get-jobs', methods=['GET'])
 @limiter.limit("1 per minute")
-def get_status():
+def get_jobs():
     return jsonify(scheduler.get_jobs())
 
 @app.route('/clear-workers', methods=['POST'])
