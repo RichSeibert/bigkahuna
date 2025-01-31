@@ -1,6 +1,7 @@
 #!/bin/bash
 
-api_key=$(<runpod_api_key)
-runpodctl config --apiKey $api_key
 pod_id=$(runpodctl get pod | awk 'NR==2 {print $1}')
+if [ -z "$pod_id" ]; then
+    echo "No runpod instance running"
+    exit
 runpodctl remove pod $pod_id

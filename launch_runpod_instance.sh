@@ -12,3 +12,4 @@ runpodctl create pod --args "bash -c 'cd /workspace/roobot; python bot.py; cd /w
                      --volumePath "/workspace" \
                      --ports "22/tcp" \
                      --networkVolumeId "ys3y7qzc5y"
+exit $?
