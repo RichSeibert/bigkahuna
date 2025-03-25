@@ -6,9 +6,9 @@ fi
 
 sudo dnf install cronie tmux rsync vim -y
 
-launch_cron_job="14 * * * launch_runpod_instance.sh"
+launch_cron_job="0 14 * * launch_runpod_instance.sh"
 (crontab -l 2>/dev/null; echo "$launch_cron_job") | crontab -
-terminate_cron_job="18 * * * terminate_runpod_instance.sh"
+terminate_cron_job="0 18 * * terminate_runpod_instance.sh"
 (crontab -l 2>/dev/null; echo "$terminate_cron_job") | crontab -
 
 export EDITOR=vim
