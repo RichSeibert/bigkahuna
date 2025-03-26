@@ -33,6 +33,9 @@ scheduler = APScheduler()
 # TODO the client should not be sending a uuid to the server. The server
 # should make a uuid, record it here, and send it back to the client
 
+# TODO scheduler doesn't seem to work. I want to use this instead of
+# cron jobs
+
 def run_runpod_command(command, run_attempt=1):
     try:
         result = subprocess.run(command, capture_output=True, text=True)
@@ -57,6 +60,7 @@ def run_runpod_command(command, run_attempt=1):
         logging.error(f"Failed to run command '{command}': {e}")
         return 1
 
+"""
 scheduler.add_job(
     id="launch_runpod_instance_job",
     func=run_runpod_command,
@@ -73,6 +77,7 @@ scheduler.add_job(
     hour=18,
     minute=0
 )
+"""
 
 # Middleware to check token
 @app.before_request
