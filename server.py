@@ -91,7 +91,7 @@ def task_completed():
 def get_status():
     return jsonify(workers)
 
-@app@app.route('/clear-workers', methods=['POST'])
+@app.route('/clear-workers', methods=['POST'])
 @limiter.limit("5 per minute")
 def clear_workers():
     logging.info(f"Clearing workers - {workers}")
