@@ -24,7 +24,6 @@ with open("token.txt") as file:
 
 app = Flask(__name__)
 limiter = Limiter(get_remote_address, app=app, default_limits=["100 per hour"])
-scheduler = APScheduler()
 
 # TODO each job/process that runs on runpod should use a client lib to send a
 # request to this server telling it when it started, and when it finished.
@@ -34,7 +33,7 @@ scheduler = APScheduler()
 # should make a uuid, record it here, and send it back to the client
 
 # TODO scheduler doesn't seem to work. I want to use this instead of
-# cron jobs
+# cron jobs. Check "scheduler" branch for last attempt
 
 def run_runpod_command(command, run_attempt=1):
     try:
@@ -42,42 +41,11 @@ def run_runpod_command(command, run_attempt=1):
         current_time = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
         logging.info(f"Ran command '{command}' at {current_time}")
         if result.returncode:
-            logging.error(f"Failed to run '{command}', will attempt again in an hour")
+            logging.error(f"Failed to run '{command}'")
             logging.error(f"stdout='{result.stdout.strip()}', stderr='{result.stderr.strip()}'")
-            if run_attempt == 1:
-                run_datetime = datetime.now() + timedelta(hours=1)
-                scheduler.add_job(
-                    id="second_runpod_attempt",
-                    func=run_runpod_command,
-                    args=[command, 2],
-                    trigger='date',
-                    run_date=run_datetime
-                )
-            else:
-                logging.error(f"Failed to run '{command}' 2nd time, will not attempt to run again")
-                return 1
     except Exception as e:
         logging.error(f"Failed to run command '{command}': {e}")
         return 1
-
-"""
-scheduler.add_job(
-    id="launch_runpod_instance_job",
-    func=run_runpod_command,
-    args=["./launch_runpod_instance.sh"],
-    trigger='cron',
-    hour=3,
-    minute=10
-)
-scheduler.add_job(
-    id="terminate_runpod_instance_job",
-    func=run_runpod_command,
-    args=["./terminate_runpod_instance.sh"],
-    trigger='cron',
-    hour=18,
-    minute=0
-)
-"""
 
 # Middleware to check token
 @app.before_request
@@ -123,22 +91,7 @@ def task_completed():
 def get_status():
     return jsonify(workers)
 
-@app.route('/get-jobs', methods=['GET'])
-@limiter.limit("5 per minute")
-def get_jobs():
-    jobs = scheduler.get_jobs()
-    job_details = [
-        {
-            "id": job.id,
-            "func": job.func_ref,
-            "args": job.args,
-            "trigger": str(job.trigger)
-        }
-        for job in jobs
-    ]
-    return jsonify(job_details)
-
-@app.route('/clear-workers', methods=['POST'])
+@app@app.route('/clear-workers', methods=['POST'])
 @limiter.limit("5 per minute")
 def clear_workers():
     logging.info(f"Clearing workers - {workers}")
@@ -147,6 +100,4 @@ def clear_workers():
 
 
 if __name__ == '__main__':
-    scheduler.init_app(app)
-    scheduler.start()
     app.run(host='0.0.0.0', port=8080)
