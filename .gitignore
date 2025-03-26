@@ -1,6 +1,7 @@
 token.txt
 runpod_api_key.txt
 nohup.out
+logs
 
 # custom
 tokens.json

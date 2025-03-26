@@ -11,5 +11,5 @@ runpodctl create pod --args "bash -c 'cd /workspace/rooporter; bash run.sh 2>&1 
                      --name "rooporter_pod" \
                      --volumePath "/workspace" \
                      --ports "22/tcp" \
-                     --networkVolumeId "ys3y7qzc5y"
+                     --networkVolumeId "lwcert228o"
 exit $?
