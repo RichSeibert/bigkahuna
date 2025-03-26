@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from flask_apscheduler import APScheduler
 
 import logging
 from datetime import datetime
@@ -18,6 +17,7 @@ logging.basicConfig(
 )
 logging.info("\n-------------------------------------------------\n")
 
+# WARNING - This will not working multiple gunicorn instances. You cannot use global variables like this
 workers = {}
 with open("token.txt") as file:
     token = file.read().split("\n")[0]
@@ -97,7 +97,6 @@ def clear_workers():
     logging.info(f"Clearing workers - {workers}")
     workers.clear()
     return jsonify({"status": "Cleared workers"}), 200
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
